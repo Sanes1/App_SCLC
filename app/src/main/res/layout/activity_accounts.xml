@@ -6,10 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Accounts"
-    android:background="@color/backgroundcolor"
+    android:background="@color/grey"
     android:fitsSystemWindows="true">
 
-    <!-- NavigationView as a Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_accounts"
         android:layout_width="wrap_content"
@@ -18,204 +17,188 @@
         app:headerLayout="@layout/header"
         app:menu="@menu/menu"
         android:background="@color/maroon"
-        app:iconTint="@color/white"
-        app:itemTextColor="@color/white"/>
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white" />
 
-    <!-- Main Content -->
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarAccount"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/grey"
-                android:theme="?attr/actionBarTheme"
-                android:gravity="center_vertical"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:navigationIcon="@drawable/hamburger"
-                app:title=" ">
-                <!-- Centered TextView inside Toolbar -->
-                <TextView
-                    android:id="@+id/head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SCLC INFORMATION SYSTEM"
-                    android:textColor="@color/black"
-                    android:gravity="center"
-                    android:layout_gravity="center"/>
-            </androidx.appcompat.widget.Toolbar>
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="377dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/username_email"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/toolbarAccount"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <!-- Header Row -->
-                <LinearLayout
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbarAccount"
                     android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/grey"
+                    android:theme="?attr/actionBarTheme"
+                    android:gravity="center_vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:navigationIcon="@drawable/hamburger"
+                    app:title=" ">
+
+                    <!-- Centered TextView inside Toolbar -->
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SCLC INFORMATION SYSTEM"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/backgroundcolor"/>
+
+                    <!-- Profile ImageView on the right side of Toolbar -->
+                    <ImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="16dp"
+                        android:contentDescription="Profile"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/pfp"
+                        android:padding="4dp" />
+                </androidx.appcompat.widget.Toolbar>
+
+                <!-- Grades Header -->
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="340dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/maroon_field"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/toolbarAccount">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Subject"
-                        android:textSize="18sp"
-                        android:padding="8dp"/>
+                    <!-- Grade Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="5dp">
 
-                    <!-- Single Grades Header -->
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Grades"
-                        android:textSize="18sp"
-                        android:padding="8dp"/>
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grades"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="8dp" />
+
+                        <!-- Grade Headers G1 to Final -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/g1"
+                                android:layout_width="30dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="45dp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:text="P1"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/g2"
+                                android:layout_width="30dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="3dp"
+                                android:gravity="center"
+                                android:text="P2"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/g3"
+                                android:layout_width="30dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="3dp"
+                                android:gravity="center"
+                                android:text="P3"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/g4"
+                                android:layout_width="30dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="3dp"
+                                android:gravity="center"
+                                android:text="P4"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/finalLayout"
+                                android:layout_width="30dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="3dp"
+                                android:gravity="center"
+                                android:text="Final"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <!-- Spinner (Dropdown) for Dates -->
+                            <Spinner
+                                android:id="@+id/dateSpinner"
+                                android:layout_width="50dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="5dp"
+                                android:gravity="center"
+                                android:background="@android:drawable/btn_dropdown"
+                                android:popupBackground="@color/white"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
-                <!-- Data Rows for Subjects -->
-                <!-- Each Row: Subject name + multiple Grades -->
+                <!-- Grades RecyclerView -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/grades1Layout"
+                    android:layout_width="340dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/field"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:text="Mathematics"
-                        android:padding="8dp"/>
-
-                    <!-- Grade Columns -->
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G1"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G2"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G3"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G4"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G5"
-                        android:padding="8dp"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/grades1RecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp" />
                 </LinearLayout>
-
-                <!-- Repeat similar rows for other subjects -->
-
-                <!-- Example Last Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:text="English"
-                        android:padding="8dp"/>
-
-                    <!-- Grade Columns -->
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G1"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G2"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G3"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G4"
-                        android:padding="8dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="G5"
-                        android:padding="8dp"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="377dp"
-                android:layout_height="278dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/username_email"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout2">
-
-                <TextView
-                    android:id="@+id/Payment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Enrolled Subjects"
-                    android:textSize="20sp"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

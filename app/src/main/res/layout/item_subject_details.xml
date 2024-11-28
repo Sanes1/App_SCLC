@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/subjectName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+    android:layout_marginEnd="1dp"
+    android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subjectGrades"
+        android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="3dp"
+    android:minWidth="90dp"
+    android:gravity="start" />
+
+</LinearLayout>

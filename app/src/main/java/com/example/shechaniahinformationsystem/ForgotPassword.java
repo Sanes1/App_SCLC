@@ -2,28 +2,25 @@ package com.example.shechaniahinformationsystem;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.regex.Pattern;
 
 public class ForgotPassword extends AppCompatActivity {
     private EditText emailEditText;
     private AppCompatButton resetButton;
-    private EditText tokenInput;
-    private AppCompatButton submitTokenButton;
-
-    private static final Pattern EMAIL_PATTERN =
-            Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,89 +29,76 @@ public class ForgotPassword extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.forgot1);
         resetButton = findViewById(R.id.btn1);
-        tokenInput = findViewById(R.id.token1);
-        submitTokenButton = findViewById(R.id.btnreset);
-
-        // Set an input filter to restrict token input to digits only
-        tokenInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)}); // Optional: limit length to 6
-        tokenInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Show submitTokenButton if tokenInput has text
-                if (s.toString().trim().isEmpty()) {
-                    submitTokenButton.setVisibility(View.GONE);
-                } else {
-                    submitTokenButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
 
         resetButton.setOnClickListener(view -> sendPasswordResetRequest());
-
-        // Handle token submission
-        submitTokenButton.setOnClickListener(view -> {
-            String token = tokenInput.getText().toString().trim();
-            if (!token.matches("\\d+")) { // Ensure token is numeric
-                Toast.makeText(ForgotPassword.this, "Token must be numeric", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            // Proceed with token submission logic
-            // ...
-        });
     }
 
-    // ... (Your existing ForgotPassword.java code)
-
     private void sendPasswordResetRequest() {
-        String email = emailEditText.getText().toString().trim();
+        String username = emailEditText.getText().toString().trim();
 
-        if (email.isEmpty() || !EMAIL_PATTERN.matcher(email).matches()) {
-            Toast.makeText(ForgotPassword.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+        if (username.isEmpty()) {
+            Toast.makeText(ForgotPassword.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
             return;
         }
 
         new Thread(() -> {
             try {
-                URL url = new URL("https://sclc.scarlet2.io/forgotpassword.php");
+                URL url = new URL("https://sclc.scarlet2.io/forgotpassword.php?username=" + username);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-                String postData = "email=" + email;
-                OutputStream os = connection.getOutputStream();
-                os.write(postData.getBytes());
-                os.flush();
-                os.close();
+                connection.setRequestMethod("GET");
 
                 int responseCode = connection.getResponseCode();
-                runOnUiThread(() -> {
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        Toast.makeText(ForgotPassword.this, "Password reset request sent successfully", Toast.LENGTH_SHORT).show();
+                Log.d("ForgotPassword", "Response Code: " + responseCode);
 
-                        // Get the token from the response (you'll need to modify your PHP script to return the token)
-                        String token = connection.getHeaderField("token");
+                // Read the response
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
 
-                        // Start ResetPassword activity and pass the email and token
-                        Intent intent = new Intent(ForgotPassword.this, ResetPassword.class);
-                        intent.putExtra("email", email);
-                        intent.putExtra("token", token);
-                        startActivity(intent);
-                        finish(); // Close ForgotPassword activity
-                    } else {
-                        Toast.makeText(ForgotPassword.this, "Error sending request", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
 
+                // Log the full response for debugging
+                String jsonResponse = response.toString();
+                Log.d("ForgotPassword", "Response: " + jsonResponse);
+
+                // Check if the response is valid JSON
+                if (jsonResponse.startsWith("{") && jsonResponse.endsWith("}")) {
+                    JSONObject jsonObject = new JSONObject(jsonResponse);
+                    boolean success = jsonObject.getBoolean("success");
+
+                    runOnUiThread(() -> {
+                        if (success) {
+                            // Get the student_id from the response
+                            String studentId = null;
+                            try {
+                                studentId = jsonObject.getString("student_id");
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            // Navigate to ResetPassword activity with username and student ID
+                            Intent intent = new Intent(ForgotPassword.this, ResetPassword.class);
+                            intent.putExtra("username", username);
+                            intent.putExtra("student_id", studentId);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            String message = null;
+                            try {
+                                message = jsonObject.getString("message");
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Toast.makeText(ForgotPassword.this, message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(ForgotPassword.this, "Invalid response from server.", Toast.LENGTH_SHORT).show());
+                }
             } catch (Exception e) {
+                Log.e("ForgotPassword", "Error: " + e.getMessage(), e);
                 runOnUiThread(() -> Toast.makeText(ForgotPassword.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();

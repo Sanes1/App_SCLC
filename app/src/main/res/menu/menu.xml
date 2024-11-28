@@ -5,28 +5,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_dashboard"
-            android:title="Dashboard"
-            android:icon="@drawable/dashboard" />
-        <item
-            android:id="@+id/nav_account"
-            android:title="Account"
-            android:icon="@drawable/account" />
+            android:title="Announcements"
+            android:icon="@drawable/dashboard"
+            android:background="@drawable/nav_item_background"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_account"-->
+<!--            android:title="Grades"-->
+<!--            android:icon="@drawable/account"-->
+<!--            android:background="@drawable/nav_item_background"/>-->
         <item
             android:id="@+id/nav_profile"
             android:title="Profile"
-            android:icon="@drawable/profile" />
+            android:icon="@drawable/profile"
+            android:background="@drawable/nav_item_background"/>
         <item
-            android:id="@+id/attendance"
-            android:title="Attendance"
-            android:icon="@drawable/attendance" />
-        <item
-            android:id="@+id/schedule"
+            android:id="@+id/nav_schedule"
             android:title="Schedule"
             android:icon="@drawable/schedule" />
-        <item
-            android:id="@+id/password"
-            android:title="Password"
-            android:icon="@drawable/password_icon" />
     </group>
         <item
             android:title=" ">
@@ -35,7 +30,8 @@
                 <item
                 android:id="@+id/logout"
                 android:title="Logout"
-                android:icon="@drawable/logout" />
+                android:icon="@drawable/logout"
+                    android:background="@drawable/nav_item_background"/>
                 </group>
             </menu>
         </item>

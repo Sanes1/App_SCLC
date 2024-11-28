@@ -38,10 +38,15 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation (libs.volley)
-    implementation(libs.play.services.auth)
-    implementation(libs.legacy.support.v4)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    implementation (libs.okhttp3.okhttp)
+    implementation (libs.logging.interceptor)
+    implementation(libs.jbcrypt)
+    implementation (libs.gson)
+    implementation (libs.androidx.recyclerview.v121)
+
+    implementation (libs.androidx.swiperefreshlayout)
+    implementation (libs.glide)
+    annotationProcessor (libs.compiler)
+    implementation(libs.androidx.recyclerview)
 
 }
